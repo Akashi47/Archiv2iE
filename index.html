@@ -3,26 +3,37 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>2iE — Ressources Pédagogiques</title>
+<title>Archiv2iE — Ressources Pédagogiques</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green:     #0F6E56;
-    --green-light: #E1F5EE;
-    --green-mid: #1D9E75;
-    --blue:      #185FA5;
-    --blue-light:#E6F1FB;
-    --amber:     #854F0B;
-    --amber-light:#FAEEDA;
-    --ink:       #1a1a18;
-    --muted:     #5c5c58;
-    --faint:     #9a9a94;
-    --bg:        #f7f6f2;
-    --white:     #ffffff;
-    --border:    rgba(0,0,0,0.08);
-    --radius:    12px;
+    /* Couleurs filières */
+    --gee-red:        #C0392B;
+    --gee-red-light:  #FDECEA;
+    --gee-red-mid:    #E74C3C;
+
+    --gc-yellow:      #D4A017;
+    --gc-yellow-light:#FEF9EC;
+    --gc-yellow-mid:  #F0C040;
+
+    --geaah-blue:     #1A5E9C;
+    --geaah-blue-light:#EAF2FB;
+    --geaah-blue-mid: #2980B9;
+
+    /* Neutres */
+    --ink:    #1C1C1A;
+    --muted:  #5A5A56;
+    --faint:  #9A9A94;
+    --bg:     #FFFFFF;
+    --bg-soft:#F7F6F2;
+    --white:  #FFFFFF;
+    --border: rgba(0,0,0,0.09);
+
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -40,86 +51,99 @@
   /* ── NAV ── */
   nav {
     position: sticky; top: 0; z-index: 100;
-    background: rgba(247,246,242,0.92);
-    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.96);
+    backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--border);
     padding: 0 2rem;
-    height: 56px;
-    display: flex; align-items: center; justify-content: space-between;
+    height: 58px;
+    display: flex; align-items: center; gap: 20px;
   }
+
   .nav-logo {
-    font-family: 'DM Serif Display', serif;
-    font-size: 18px;
-    color: var(--green);
-    letter-spacing: -0.3px;
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
   }
+
+  /* Logo SVG 2iE */
+  .logo-svg { height: 34px; width: auto; }
+
+  .logo-divider {
+    width: 1px; height: 22px;
+    background: var(--border);
+  }
+
+  .logo-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    letter-spacing: -0.2px;
+    color: var(--ink);
+    line-height: 1;
+  }
+  .logo-name span {
+    color: var(--gee-red);
+  }
+
   .nav-links {
-    display: flex; gap: 2rem;
+    display: flex; gap: 1.8rem;
     list-style: none;
+    margin-left: auto;
   }
   .nav-links a {
-    font-size: 13px;
-    font-weight: 500;
+    font-size: 13px; font-weight: 400;
     color: var(--muted);
     transition: color 0.15s;
   }
   .nav-links a:hover { color: var(--ink); }
+
   .nav-cta {
-    font-size: 13px;
-    font-weight: 500;
-    padding: 7px 16px;
-    border-radius: 20px;
-    background: var(--green);
-    color: var(--white);
+    font-size: 13px; font-weight: 500;
+    padding: 7px 18px; border-radius: 24px;
+    background: var(--ink); color: var(--white);
     transition: opacity 0.15s;
+    flex-shrink: 0;
   }
-  .nav-cta:hover { opacity: 0.85; }
+  .nav-cta:hover { opacity: 0.82; }
 
   /* ── HERO ── */
   .hero {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 80px 2rem 64px;
+    max-width: 900px; margin: 0 auto;
+    padding: 72px 2rem 60px;
     display: grid;
     grid-template-columns: 1fr auto;
-    gap: 2rem;
-    align-items: end;
+    gap: 3rem; align-items: end;
   }
-  .hero-tag {
-    display: inline-flex; align-items: center; gap: 6px;
-    font-size: 11px; font-weight: 500; letter-spacing: 0.8px;
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 11px; font-weight: 500; letter-spacing: 0.7px;
     text-transform: uppercase;
-    color: var(--green);
-    background: var(--green-light);
+    color: var(--gee-red);
+    background: var(--gee-red-light);
     padding: 4px 12px; border-radius: 20px;
-    margin-bottom: 20px;
+    margin-bottom: 18px;
   }
-  .hero-tag::before {
-    content: '';
-    display: block; width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green-mid);
+  .hero-eyebrow::before {
+    content: ''; display: block;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--gee-red-mid);
   }
+
   .hero h1 {
     font-family: 'DM Serif Display', serif;
-    font-size: clamp(32px, 5vw, 48px);
-    line-height: 1.15;
-    letter-spacing: -0.5px;
-    color: var(--ink);
-    margin-bottom: 16px;
+    font-size: clamp(30px, 4.5vw, 46px);
+    line-height: 1.15; letter-spacing: -0.5px;
+    color: var(--ink); margin-bottom: 16px;
   }
-  .hero h1 em {
-    font-style: italic;
-    color: var(--green);
-  }
+  .hero h1 em { font-style: italic; color: var(--geaah-blue); }
+
   .hero-sub {
-    font-size: 16px;
-    color: var(--muted);
-    max-width: 460px;
-    line-height: 1.65;
-    margin-bottom: 32px;
+    font-size: 15px; color: var(--muted);
+    max-width: 460px; line-height: 1.7;
+    margin-bottom: 30px;
   }
-  .hero-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+
+  .hero-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
   .btn-primary {
     display: inline-flex; align-items: center; gap: 8px;
     font-size: 14px; font-weight: 500;
@@ -127,163 +151,163 @@
     background: var(--ink); color: var(--white);
     transition: transform 0.15s, opacity 0.15s;
   }
-  .btn-primary:hover { transform: translateY(-1px); opacity: 0.9; }
-  .btn-secondary {
+  .btn-primary:hover { transform: translateY(-1px); opacity: 0.88; }
+
+  .btn-outline {
     display: inline-flex; align-items: center; gap: 8px;
-    font-size: 14px; font-weight: 500;
+    font-size: 14px; font-weight: 400;
     padding: 10px 22px; border-radius: 24px;
     border: 1px solid var(--border);
     background: var(--white); color: var(--muted);
     transition: border-color 0.15s, color 0.15s;
   }
-  .btn-secondary:hover { border-color: rgba(0,0,0,0.2); color: var(--ink); }
+  .btn-outline:hover { border-color: rgba(0,0,0,0.2); color: var(--ink); }
 
   .hero-stats {
-    display: flex; flex-direction: column; gap: 16px;
-    align-self: end;
+    display: flex; flex-direction: column; gap: 18px;
+    align-self: end; padding-bottom: 4px;
   }
-  .stat {
-    text-align: right;
-  }
+  .stat { text-align: right; }
   .stat-num {
     font-family: 'DM Serif Display', serif;
-    font-size: 28px; color: var(--ink);
-    line-height: 1;
+    font-size: 30px; color: var(--ink); line-height: 1;
   }
-  .stat-label {
-    font-size: 12px; color: var(--faint);
-    margin-top: 2px;
+  .stat-label { font-size: 12px; color: var(--faint); margin-top: 2px; }
+
+  /* ── WRAPPER ── */
+  .wrap {
+    max-width: 900px; margin: 0 auto;
+    padding: 0 2rem;
   }
 
-  /* ── DIVIDER ── */
-  .divider {
-    max-width: 860px; margin: 0 auto;
+  hr.divider {
+    max-width: 900px; margin: 0 auto;
     border: none; border-top: 1px solid var(--border);
   }
 
-  /* ── SECTIONS ── */
-  .section {
-    max-width: 860px;
-    margin: 0 auto;
-    padding: 56px 2rem;
-  }
+  /* ── SECTION ── */
+  .section { padding: 52px 0; }
+  .section.alt { background: var(--bg-soft); }
+
   .section-head {
     display: flex; justify-content: space-between; align-items: baseline;
-    margin-bottom: 24px;
+    margin-bottom: 22px;
   }
   .section-title {
     font-family: 'DM Serif Display', serif;
-    font-size: 22px; letter-spacing: -0.3px;
+    font-size: 21px; letter-spacing: -0.3px; color: var(--ink);
   }
-  .section-hint {
-    font-size: 13px; color: var(--faint);
-  }
+  .section-hint { font-size: 13px; color: var(--faint); }
 
-  /* ── NAV CARDS (accès rapide) ── */
+  /* ── ACCÈS RAPIDE ── */
   .nav-cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
+
   .nav-card {
-    background: var(--white);
+    background: var(--bg-soft);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: var(--radius-md);
     padding: 20px 22px;
-    display: flex; flex-direction: column; gap: 6px;
-    transition: transform 0.15s, box-shadow 0.15s;
+    display: flex; flex-direction: column; gap: 5px;
     cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
   }
   .nav-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(0,0,0,0.06);
   }
+
   .card-icon {
-    width: 36px; height: 36px;
-    border-radius: 8px;
+    width: 36px; height: 36px; border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    margin-bottom: 4px;
+    font-size: 17px; margin-bottom: 6px;
   }
-  .icon-green  { background: var(--green-light); }
-  .icon-blue   { background: var(--blue-light); }
-  .icon-amber  { background: var(--amber-light); }
-  .icon-purple { background: #EEEDFE; }
-  .card-title {
-    font-size: 15px; font-weight: 500; color: var(--ink);
-  }
-  .card-desc {
-    font-size: 13px; color: var(--muted); line-height: 1.45;
-  }
+  .icon-red    { background: var(--gee-red-light); }
+  .icon-yellow { background: var(--gc-yellow-light); }
+  .icon-blue   { background: var(--geaah-blue-light); }
+  .icon-gray   { background: #F0EEE8; }
+
+  .card-title { font-size: 15px; font-weight: 500; color: var(--ink); }
+  .card-desc  { font-size: 13px; color: var(--muted); line-height: 1.45; }
   .card-arrow {
-    margin-top: auto; padding-top: 12px;
-    font-size: 13px; color: var(--faint);
-    display: flex; align-items: center; gap: 4px;
+    margin-top: auto; padding-top: 14px;
+    font-size: 12px; color: var(--faint);
   }
 
-  /* ── FILIERES ── */
+  /* ── FILIÈRES ── */
   .filiere-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 12px;
   }
+
   .filiere-card {
-    border-radius: var(--radius);
-    padding: 18px 20px;
+    border-radius: var(--radius-md);
+    padding: 20px 22px;
     cursor: pointer;
     transition: transform 0.15s;
+    border: 1px solid transparent;
   }
   .filiere-card:hover { transform: translateY(-2px); }
-  .fc-gee   { background: var(--green-light); }
-  .fc-gc    { background: var(--blue-light); }
-  .fc-geaah { background: var(--amber-light); }
+
+  /* GEE = rouge */
+  .fc-gee {
+    background: var(--gee-red-light);
+    border-color: rgba(192,57,43,0.15);
+  }
+  .fc-gee .filiere-name { color: var(--gee-red); }
+  .fc-gee .filiere-full { color: #7B241C; }
+  .fc-gee .sem-pill     { background: rgba(192,57,43,0.1); color: #7B241C; }
+
+  /* GC = jaune */
+  .fc-gc {
+    background: var(--gc-yellow-light);
+    border-color: rgba(212,160,23,0.2);
+  }
+  .fc-gc .filiere-name { color: var(--gc-yellow); }
+  .fc-gc .filiere-full { color: #7D5F0B; }
+  .fc-gc .sem-pill     { background: rgba(212,160,23,0.15); color: #7D5F0B; }
+
+  /* GEAAH = bleu */
+  .fc-geaah {
+    background: var(--geaah-blue-light);
+    border-color: rgba(26,94,156,0.15);
+  }
+  .fc-geaah .filiere-name { color: var(--geaah-blue); }
+  .fc-geaah .filiere-full { color: #154E82; }
+  .fc-geaah .sem-pill     { background: rgba(26,94,156,0.1); color: #154E82; }
+
   .filiere-name {
     font-family: 'DM Serif Display', serif;
-    font-size: 20px; margin-bottom: 4px;
+    font-size: 22px; margin-bottom: 4px;
   }
-  .fc-gee   .filiere-name { color: var(--green); }
-  .fc-gc    .filiere-name { color: var(--blue); }
-  .fc-geaah .filiere-name { color: var(--amber); }
-  .filiere-full {
-    font-size: 12px; line-height: 1.4;
-  }
-  .fc-gee   .filiere-full { color: #0F6E56; }
-  .fc-gc    .filiere-full { color: #185FA5; }
-  .fc-geaah .filiere-full { color: #854F0B; }
-  .filiere-sems {
-    margin-top: 12px;
-    display: flex; gap: 6px; flex-wrap: wrap;
-  }
+  .filiere-full { font-size: 12px; line-height: 1.4; }
+  .filiere-sems { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 6px; }
   .sem-pill {
     font-size: 11px; font-weight: 500;
     padding: 3px 9px; border-radius: 20px;
-    background: rgba(255,255,255,0.6);
   }
-  .fc-gee   .sem-pill { color: #085041; }
-  .fc-gc    .sem-pill { color: #0C447C; }
-  .fc-geaah .sem-pill { color: #633806; }
 
-  /* ── PARCOURS BANNER ── */
+  /* ── BANDEAU PARCOURS ── */
   .parcours-banner {
     background: var(--white);
     border: 1px solid var(--border);
-    border-left: 3px solid var(--green-mid);
-    border-radius: var(--radius);
-    padding: 16px 20px;
-    margin-top: 16px;
-    display: flex; gap: 16px; align-items: flex-start;
+    border-left: 3px solid var(--geaah-blue-mid);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    margin-top: 14px;
+    display: flex; gap: 14px; align-items: flex-start;
     font-size: 13px;
   }
   .parcours-banner-icon {
-    width: 20px; height: 20px;
-    border-radius: 50%;
-    background: var(--green-light);
+    width: 20px; height: 20px; border-radius: 50%;
+    background: var(--geaah-blue-light);
     display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    font-size: 11px;
-    color: var(--green);
-    font-weight: 700;
-    margin-top: 1px;
+    font-size: 11px; font-weight: 700;
+    color: var(--geaah-blue); flex-shrink: 0; margin-top: 1px;
   }
   .parcours-banner p { color: var(--muted); line-height: 1.5; }
   .parcours-banner strong { color: var(--ink); font-weight: 500; }
@@ -292,74 +316,94 @@
     font-size: 11px; font-weight: 500;
     padding: 3px 10px; border-radius: 20px;
   }
-  .ptag-d { background: var(--amber-light); color: var(--amber); }
-  .ptag-s { background: var(--blue-light); color: var(--blue); }
+  .ptag-d { background: var(--gc-yellow-light); color: #7D5F0B; }
+  .ptag-s { background: var(--geaah-blue-light); color: var(--geaah-blue); }
 
   /* ── DERNIERS AJOUTS ── */
   .ajouts-table {
     background: var(--white);
     border: 1px solid var(--border);
-    border-radius: var(--radius);
+    border-radius: var(--radius-md);
     overflow: hidden;
   }
   .ajouts-head {
-    display: grid; grid-template-columns: 90px 1fr 160px 90px;
+    display: grid; grid-template-columns: 90px 1fr 170px 90px;
     padding: 10px 20px;
-    background: var(--bg);
+    background: var(--bg-soft);
     border-bottom: 1px solid var(--border);
     font-size: 11px; font-weight: 500;
-    color: var(--faint); letter-spacing: 0.4px; text-transform: uppercase;
+    color: var(--faint); letter-spacing: 0.5px; text-transform: uppercase;
   }
   .ajout-row {
-    display: grid; grid-template-columns: 90px 1fr 160px 90px;
+    display: grid; grid-template-columns: 90px 1fr 170px 90px;
     padding: 13px 20px;
     border-bottom: 1px solid var(--border);
     align-items: center;
-    font-size: 13px;
-    transition: background 0.1s;
     cursor: pointer;
+    transition: background 0.1s;
   }
   .ajout-row:last-child { border-bottom: none; }
-  .ajout-row:hover { background: var(--bg); }
+  .ajout-row:hover { background: var(--bg-soft); }
+
   .badge {
     display: inline-block; font-size: 11px; font-weight: 500;
     padding: 2px 9px; border-radius: 20px;
   }
-  .badge-new { background: var(--green-light); color: #085041; }
-  .badge-maj { background: var(--blue-light); color: #0C447C; }
-  .ajout-title { color: var(--ink); font-weight: 400; }
-  .ajout-where { color: var(--muted); font-size: 12px; }
-  .ajout-date { color: var(--faint); font-size: 12px; }
+  .badge-new { background: var(--gee-red-light); color: var(--gee-red); }
+  .badge-maj { background: var(--geaah-blue-light); color: var(--geaah-blue); }
+
+  .ajout-title { font-size: 13px; color: var(--ink); }
+  .ajout-where { font-size: 12px; color: var(--muted); }
+  .ajout-date  { font-size: 12px; color: var(--faint); }
+
+  /* Couleur GEE/GC/GEAAH dans le tableau */
+  .where-gee   { color: var(--gee-red); }
+  .where-gc    { color: var(--gc-yellow); }
+  .where-geaah { color: var(--geaah-blue); }
 
   /* ── FOOTER ── */
   footer {
     border-top: 1px solid var(--border);
     padding: 24px 2rem;
-    max-width: 860px; margin: 0 auto;
+    max-width: 900px; margin: 0 auto;
     display: flex; justify-content: space-between; align-items: center;
     font-size: 12px; color: var(--faint);
   }
   footer a { color: var(--muted); transition: color 0.15s; }
   footer a:hover { color: var(--ink); }
+  .footer-links { display: flex; gap: 20px; }
+
+  /* Barre de couleurs filières en bas de la nav */
+  .filiere-bar {
+    height: 3px;
+    background: linear-gradient(
+      to right,
+      var(--gee-red)   0%   33.3%,
+      var(--gc-yellow) 33.3% 66.6%,
+      var(--geaah-blue) 66.6% 100%
+    );
+  }
 
   /* ── ANIMATIONS ── */
   @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(16px); }
+    from { opacity: 0; transform: translateY(14px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .hero, .section { animation: fadeUp 0.5s ease both; }
+  .hero    { animation: fadeUp 0.45s ease both; }
+  .section { animation: fadeUp 0.45s ease both; }
   .section:nth-child(2) { animation-delay: 0.05s; }
   .section:nth-child(3) { animation-delay: 0.1s; }
   .section:nth-child(4) { animation-delay: 0.15s; }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     .hero { grid-template-columns: 1fr; }
     .hero-stats { flex-direction: row; align-self: auto; }
     .stat { text-align: left; }
     .nav-cards { grid-template-columns: 1fr; }
     .filiere-grid { grid-template-columns: 1fr; }
-    .ajouts-head, .ajout-row { grid-template-columns: 80px 1fr 100px; }
+    .ajouts-head,
+    .ajout-row { grid-template-columns: 80px 1fr 100px; }
     .ajout-date { display: none; }
     .nav-links { display: none; }
   }
@@ -367,41 +411,64 @@
 </head>
 <body>
 
+<!-- BARRE COULEURS -->
+<div class="filiere-bar"></div>
+
 <!-- NAV -->
 <nav>
-  <div class="nav-logo">2iE Ressources</div>
+  <div class="nav-logo">
+    <!-- Logo officiel 2iE -->
+    <img src="https://www.2ie-edu.org/wp-content/uploads/2020/02/logo-2ie-1.png"
+         alt="Logo 2iE"
+         class="logo-svg"
+         onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'">
+    <!-- Fallback si le logo ne charge pas -->
+    <svg class="logo-svg" viewBox="0 0 90 34" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none">
+      <rect x="0"  y="4"  width="12" height="12" fill="#C0392B"/>
+      <rect x="14" y="4"  width="12" height="12" fill="#D4A017"/>
+      <rect x="0"  y="18" width="12" height="12" fill="#1A5E9C"/>
+      <rect x="14" y="18" width="12" height="12" fill="#1D8348"/>
+      <text x="32" y="27" font-family="DM Serif Display, serif" font-size="22" fill="#1C1C1A" letter-spacing="-0.5">2iE</text>
+    </svg>
+
+    <div class="logo-divider"></div>
+
+    <div class="logo-name">Archiv<span>2iE</span></div>
+  </div>
+
   <ul class="nav-links">
-    <li><a href="#">Cours</a></li>
-    <li><a href="#">Annales</a></li>
-    <li><a href="#">Bibliothèque</a></li>
-    <li><a href="#">Stages & PFE</a></li>
-    <li><a href="#">À propos</a></li>
+    <li><a href="cours.html">Cours</a></li>
+    <li><a href="annales.html">Annales</a></li>
+    <li><a href="bibliotheque.html">Bibliothèque</a></li>
+    <li><a href="stages.html">Stages & PFE</a></li>
+    <li><a href="a-propos.html">À propos</a></li>
   </ul>
-  <a href="#" class="nav-cta">Contribuer</a>
+
+  <a href="a-propos.html#contribuer" class="nav-cta">Contribuer</a>
 </nav>
 
 <!-- HERO -->
 <div class="hero">
   <div>
-    <div class="hero-tag">Institut international d'ingénierie de l'eau et de l'environnement</div>
+    <div class="hero-eyebrow">Institut international d'ingénierie de l'eau et de l'environnement</div>
     <h1>La base de ressources<br><em>pédagogiques</em> de 2iE</h1>
     <p class="hero-sub">Retrouvez vos supports de cours, sujets d'examens et ouvrages de référence — organisés par semestre et par filière.</p>
     <div class="hero-actions">
-      <a href="#" class="btn-primary">Accéder aux cours →</a>
-      <a href="#" class="btn-secondary">Voir les annales</a>
+      <a href="cours.html" class="btn-primary">Accéder aux cours →</a>
+      <a href="annales.html" class="btn-outline">Voir les annales</a>
     </div>
   </div>
   <div class="hero-stats">
     <div class="stat">
-      <div class="stat-num">3</div>
+      <div class="stat-num" style="color:var(--gee-red)">3</div>
       <div class="stat-label">Filières</div>
     </div>
     <div class="stat">
-      <div class="stat-num">8</div>
+      <div class="stat-num" style="color:var(--gc-yellow)">8</div>
       <div class="stat-label">Semestres</div>
     </div>
     <div class="stat">
-      <div class="stat-num">2</div>
+      <div class="stat-num" style="color:var(--geaah-blue)">2</div>
       <div class="stat-label">Parcours S5/S6</div>
     </div>
   </div>
@@ -410,144 +477,172 @@
 <hr class="divider">
 
 <!-- ACCÈS RAPIDE -->
-<div class="section">
-  <div class="section-head">
-    <h2 class="section-title">Accès rapide</h2>
-    <span class="section-hint">Toutes les ressources</span>
+<div style="background:var(--bg)">
+<div class="wrap">
+  <div class="section">
+    <div class="section-head">
+      <h2 class="section-title">Accès rapide</h2>
+      <span class="section-hint">Toutes les ressources</span>
+    </div>
+    <div class="nav-cards">
+      <a href="cours.html" class="nav-card">
+        <div class="card-icon icon-red">📚</div>
+        <div class="card-title">Cours</div>
+        <div class="card-desc">Supports de cours, travaux dirigés et travaux pratiques par semestre</div>
+        <div class="card-arrow">Voir les cours →</div>
+      </a>
+      <a href="annales.html" class="nav-card">
+        <div class="card-icon icon-blue">📝</div>
+        <div class="card-title">Annales</div>
+        <div class="card-desc">Sujets d'examens passés et corrigés disponibles</div>
+        <div class="card-arrow">Voir les annales →</div>
+      </a>
+      <a href="bibliotheque.html" class="nav-card">
+        <div class="card-icon icon-yellow">📖</div>
+        <div class="card-title">Bibliothèque</div>
+        <div class="card-desc">Livres de référence, articles scientifiques et outils pédagogiques</div>
+        <div class="card-arrow">Voir la bibliothèque →</div>
+      </a>
+      <a href="stages.html" class="nav-card">
+        <div class="card-icon icon-gray">🗂️</div>
+        <div class="card-title">Stages & PFE</div>
+        <div class="card-desc">Rapports, guides méthodologiques et modèles de documents</div>
+        <div class="card-arrow">Voir les stages →</div>
+      </a>
+    </div>
   </div>
-  <div class="nav-cards">
-    <a href="#" class="nav-card">
-      <div class="card-icon icon-green">📚</div>
-      <div class="card-title">Cours</div>
-      <div class="card-desc">Supports de cours, travaux dirigés et travaux pratiques par semestre</div>
-      <div class="card-arrow">Voir les cours <span>→</span></div>
-    </a>
-    <a href="#" class="nav-card">
-      <div class="card-icon icon-blue">📝</div>
-      <div class="card-title">Annales</div>
-      <div class="card-desc">Sujets d'examens passés et corrigés disponibles</div>
-      <div class="card-arrow">Voir les annales <span>→</span></div>
-    </a>
-    <a href="#" class="nav-card">
-      <div class="card-icon icon-purple">📖</div>
-      <div class="card-title">Bibliothèque</div>
-      <div class="card-desc">Livres de référence, articles scientifiques et outils pédagogiques</div>
-      <div class="card-arrow">Voir la bibliothèque <span>→</span></div>
-    </a>
-    <a href="#" class="nav-card">
-      <div class="card-icon icon-amber">🗂️</div>
-      <div class="card-title">Stages & PFE</div>
-      <div class="card-desc">Rapports, guides méthodologiques et modèles de documents</div>
-      <div class="card-arrow">Voir les stages <span>→</span></div>
-    </a>
-  </div>
+</div>
 </div>
 
 <hr class="divider">
 
 <!-- FILIÈRES -->
-<div class="section">
-  <div class="section-head">
-    <h2 class="section-title">Spécialisation — S5 à S8</h2>
-    <span class="section-hint">Accès direct par filière</span>
-  </div>
-  <div class="filiere-grid">
-    <a href="#" class="filiere-card fc-gee">
-      <div class="filiere-name">GEE</div>
-      <div class="filiere-full">Génie énergie &amp; environnement</div>
-      <div class="filiere-sems">
-        <span class="sem-pill">S5D</span><span class="sem-pill">S5S</span>
-        <span class="sem-pill">S6D</span><span class="sem-pill">S6S</span>
-        <span class="sem-pill">S7</span><span class="sem-pill">S8</span>
-      </div>
-    </a>
-    <a href="#" class="filiere-card fc-gc">
-      <div class="filiere-name">GC</div>
-      <div class="filiere-full">Génie civil</div>
-      <div class="filiere-sems">
-        <span class="sem-pill">S5D</span><span class="sem-pill">S5S</span>
-        <span class="sem-pill">S6D</span><span class="sem-pill">S6S</span>
-        <span class="sem-pill">S7</span><span class="sem-pill">S8</span>
-      </div>
-    </a>
-    <a href="#" class="filiere-card fc-geaah">
-      <div class="filiere-name">GEAAH</div>
-      <div class="filiere-full">Génie agro-alimentaire &amp; hydrologie</div>
-      <div class="filiere-sems">
-        <span class="sem-pill">S5D</span><span class="sem-pill">S5S</span>
-        <span class="sem-pill">S6D</span><span class="sem-pill">S6S</span>
-        <span class="sem-pill">S7</span><span class="sem-pill">S8</span>
-      </div>
-    </a>
-  </div>
+<div style="background:var(--bg-soft)">
+<div class="wrap">
+  <div class="section">
+    <div class="section-head">
+      <h2 class="section-title">Spécialisation — S5 à S8</h2>
+      <span class="section-hint">Accès direct par filière</span>
+    </div>
+    <div class="filiere-grid">
 
-  <div class="parcours-banner">
-    <div class="parcours-banner-icon">i</div>
-    <div>
-      <p><strong>S5 et S6 — deux parcours disponibles selon votre profil d'entrée à 2iE.</strong> Choisissez le bon parcours dans votre filière.</p>
-      <div class="parcours-tags">
-        <span class="ptag ptag-d">Parcours D — intégration après BTS</span>
-        <span class="ptag ptag-s">Parcours S — intégration après BAC</span>
+      <!-- GEE — ROUGE -->
+      <a href="cours/gee/index.html" class="filiere-card fc-gee">
+        <div class="filiere-name">GEE</div>
+        <div class="filiere-full">Génie énergie &amp; environnement</div>
+        <div class="filiere-sems">
+          <span class="sem-pill">S5D</span>
+          <span class="sem-pill">S5S</span>
+          <span class="sem-pill">S6D</span>
+          <span class="sem-pill">S6S</span>
+          <span class="sem-pill">S7</span>
+          <span class="sem-pill">S8</span>
+        </div>
+      </a>
+
+      <!-- GC — JAUNE -->
+      <a href="cours/gc/index.html" class="filiere-card fc-gc">
+        <div class="filiere-name">GC</div>
+        <div class="filiere-full">Génie civil</div>
+        <div class="filiere-sems">
+          <span class="sem-pill">S5D</span>
+          <span class="sem-pill">S5S</span>
+          <span class="sem-pill">S6D</span>
+          <span class="sem-pill">S6S</span>
+          <span class="sem-pill">S7</span>
+          <span class="sem-pill">S8</span>
+        </div>
+      </a>
+
+      <!-- GEAAH — BLEU -->
+      <a href="cours/geaah/index.html" class="filiere-card fc-geaah">
+        <div class="filiere-name">GEAAH</div>
+        <div class="filiere-full">Génie agro-alimentaire &amp; hydrologie</div>
+        <div class="filiere-sems">
+          <span class="sem-pill">S5D</span>
+          <span class="sem-pill">S5S</span>
+          <span class="sem-pill">S6D</span>
+          <span class="sem-pill">S6S</span>
+          <span class="sem-pill">S7</span>
+          <span class="sem-pill">S8</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="parcours-banner">
+      <div class="parcours-banner-icon">i</div>
+      <div>
+        <p><strong>S5 et S6 — deux parcours selon votre profil d'entrée à 2iE.</strong> Sélectionnez le bon parcours dans votre filière.</p>
+        <div class="parcours-tags">
+          <span class="ptag ptag-d">Parcours D — intégration après BTS</span>
+          <span class="ptag ptag-s">Parcours S — intégration après BAC</span>
+        </div>
       </div>
     </div>
   </div>
+</div>
 </div>
 
 <hr class="divider">
 
 <!-- DERNIERS AJOUTS -->
-<div class="section">
-  <div class="section-head">
-    <h2 class="section-title">Derniers ajouts</h2>
-    <span class="section-hint">Mis à jour régulièrement</span>
+<div style="background:var(--bg)">
+<div class="wrap">
+  <div class="section">
+    <div class="section-head">
+      <h2 class="section-title">Derniers ajouts</h2>
+      <span class="section-hint">Mis à jour régulièrement</span>
+    </div>
+    <div class="ajouts-table">
+      <div class="ajouts-head">
+        <span>Type</span>
+        <span>Document</span>
+        <span>Filière / Semestre</span>
+        <span>Date</span>
+      </div>
+      <div class="ajout-row">
+        <span class="badge badge-new">Nouveau</span>
+        <span class="ajout-title">Cours Hydraulique urbaine</span>
+        <span class="ajout-where where-gee">GEE — S7</span>
+        <span class="ajout-date">01/04/2026</span>
+      </div>
+      <div class="ajout-row">
+        <span class="badge badge-maj">Mis à jour</span>
+        <span class="ajout-title">Annales Mécanique des sols</span>
+        <span class="ajout-where where-gc">GC — S5D</span>
+        <span class="ajout-date">28/03/2026</span>
+      </div>
+      <div class="ajout-row">
+        <span class="badge badge-new">Nouveau</span>
+        <span class="ajout-title">TD Traitement des eaux</span>
+        <span class="ajout-where" style="color:var(--muted)">Tronc commun — S3</span>
+        <span class="ajout-date">25/03/2026</span>
+      </div>
+      <div class="ajout-row">
+        <span class="badge badge-new">Nouveau</span>
+        <span class="ajout-title">Cours Béton armé — Tome 2</span>
+        <span class="ajout-where where-gc">GC — S6S</span>
+        <span class="ajout-date">20/03/2026</span>
+      </div>
+      <div class="ajout-row">
+        <span class="badge badge-maj">Mis à jour</span>
+        <span class="ajout-title">Guide de rédaction PFE</span>
+        <span class="ajout-where where-geaah">GEAAH — Stages</span>
+        <span class="ajout-date">15/03/2026</span>
+      </div>
+    </div>
   </div>
-  <div class="ajouts-table">
-    <div class="ajouts-head">
-      <span>Type</span>
-      <span>Document</span>
-      <span>Filière / Semestre</span>
-      <span>Date</span>
-    </div>
-    <div class="ajout-row">
-      <span class="badge badge-new">Nouveau</span>
-      <span class="ajout-title">Cours Hydraulique urbaine</span>
-      <span class="ajout-where">GEE — S7</span>
-      <span class="ajout-date">01/04/2026</span>
-    </div>
-    <div class="ajout-row">
-      <span class="badge badge-maj">Mis à jour</span>
-      <span class="ajout-title">Annales Mécanique des sols</span>
-      <span class="ajout-where">GC — S5D</span>
-      <span class="ajout-date">28/03/2026</span>
-    </div>
-    <div class="ajout-row">
-      <span class="badge badge-new">Nouveau</span>
-      <span class="ajout-title">TD Traitement des eaux</span>
-      <span class="ajout-where">Tronc commun — S3</span>
-      <span class="ajout-date">25/03/2026</span>
-    </div>
-    <div class="ajout-row">
-      <span class="badge badge-new">Nouveau</span>
-      <span class="ajout-title">Cours Béton armé — Tome 2</span>
-      <span class="ajout-where">GC — S6S</span>
-      <span class="ajout-date">20/03/2026</span>
-    </div>
-    <div class="ajout-row">
-      <span class="badge badge-maj">Mis à jour</span>
-      <span class="ajout-title">Guide de rédaction PFE</span>
-      <span class="ajout-where">Stages & PFE</span>
-      <span class="ajout-date">15/03/2026</span>
-    </div>
-  </div>
+</div>
 </div>
 
 <!-- FOOTER -->
 <footer>
-  <span>© 2026 2iE Ressources Pédagogiques</span>
-  <div style="display:flex;gap:20px;">
-    <a href="#">Contribuer</a>
-    <a href="#">À propos</a>
-    <a href="#">Site officiel 2iE</a>
+  <span>© 2026 Archiv2iE · Ressources pédagogiques de l'Institut 2iE</span>
+  <div class="footer-links">
+    <a href="a-propos.html#contribuer">Contribuer</a>
+    <a href="a-propos.html">À propos</a>
+    <a href="https://www.2ie-edu.org" target="_blank">Site officiel 2iE ↗</a>
   </div>
 </footer>
 
