@@ -205,3 +205,106 @@ function actualiserListeSemestres(filiereSelectionnee) {
         selectSemestre.innerHTML = '<option value="">-- Choisissez d\'abord la filière --</option>';
     }
 }
+// On cible le formulaire avec son identifiant exact
+const formulaire = document.getElementById('formulaire-contribution');
+
+if (formulaire) {
+    formulaire.addEventListener('submit', function(e) {
+        e.preventDefault(); // On empêche le rechargement de la page
+        
+        // Effet visuel sur ton bouton pour faire patienter l'utilisateur
+        const bouton = formulaire.querySelector('button[type="submit"]');
+        const texteOrigine = bouton.innerHTML;
+        bouton.innerHTML = "Envoi en cours... ⏳";
+        bouton.disabled = true;
+
+        // Récupération du fichier via son ID exact
+        const champFichier = document.getElementById('contrib-fichier');
+        const fichier = champFichier.files[0];
+
+        if (!fichier) {
+            alert("Veuillez sélectionner un fichier à envoyer.");
+            bouton.innerHTML = texteOrigine;
+            bouton.disabled = false;
+            return;
+        }
+
+        // Lecture et conversion du document en Base64
+        const reader = new FileReader();
+        reader.readAsDataURL(fichier);
+        
+        reader.onload = function() {
+            const base64Data = reader.result.split(',')[1];
+            
+            const filePayload = {
+                filename: fichier.name,
+                mimeType: fichier.type,
+                bytes: base64Data
+            };
+
+            // Extraction des valeurs en utilisant tes vrais ID et balises boutons radios
+            const vNom = document.getElementById('contrib-nom').value;
+            const vEmail = document.getElementById('contrib-email').value;
+            
+            // Radio bouton pour le statut
+            const rStatut = formulaire.querySelector('input[name="statut-user"]:checked');
+            const vStatut = rStatut ? rStatut.value : "Non précisé";
+            
+            // Sélections textuelles des listes déroulantes
+            const eFiliere = document.getElementById('contrib-filiere');
+            const vFiliere = eFiliere.options[eFiliere.selectedIndex].text;
+            
+            const eSemestre = document.getElementById('contrib-semestre');
+            const vSemestre = eSemestre.options[eSemestre.selectedIndex].text;
+            
+            const vNomDoc = document.getElementById('contrib-nom-doc').value;
+            const vMatiere = document.getElementById('contrib-matiere').value;
+            
+            // Radio bouton pour le type de document
+            const rType = formulaire.querySelector('input[name="type-doc"]:checked');
+            const vType = rType ? rType.value : "Autre";
+            
+            const vCommentaire = document.getElementById('contrib-commentaire').value;
+
+            // Construction de l'adresse de transmission vers ton Google Apps Script
+            const urlScript = "https://script.google.com/macros/s/AKfycbyCsHpIQj_ncjj6Tjbvaz4xqoA6KbWBpXmR-D5TvAVdTAFgKZzXpjzhf0TaDY41J7Ol/exec"
+                + "?nom=" + encodeURIComponent(vNom)
+                + "&email=" + encodeURIComponent(vEmail)
+                + "&statut=" + encodeURIComponent(vStatut)
+                + "&filiere=" + encodeURIComponent(vFiliere)
+                + "&semestre=" + encodeURIComponent(vSemestre)
+                + "&typeDoc=" + encodeURIComponent(vType + " - " + vNomDoc)
+                + "&matiere=" + encodeURIComponent(vMatiere)
+                + "&commentaire=" + encodeURIComponent(vCommentaire || "Aucun");
+
+            // Envoi transparent à l'infrastructure de ton Google Drive
+            fetch(urlScript, {
+                method: 'POST',
+                body: JSON.stringify(filePayload)
+            })
+            .then(response => response.json())
+            .then(result => {
+                if (result.status === 'success') {
+                    alert("Merci pour votre contribution ! Votre document a bien été reçu par l'équipe Archiv2iE.");
+                    formulaire.reset(); // Nettoyage de la saisie
+                    
+                    // Si tu as une fonction JavaScript pour ré-initialiser l'état du sélecteur de semestre, appelle-la ici :
+                    if (typeof actualiserListeSemestres === "function") {
+                        document.getElementById('contrib-semestre').disabled = true;
+                    }
+                } else {
+                    alert("Une petite erreur est survenue : " + result.message);
+                }
+            })
+            .catch(error => {
+                console.error("Erreur technique :", error);
+                alert("Impossible de joindre le système. Vérifiez votre connexion internet.");
+            })
+            .finally(() => {
+                // Restauration de l'état initial de ton magnifique bouton vert
+                bouton.innerHTML = texteOrigine;
+                bouton.disabled = false;
+            });
+        };
+    });
+}
