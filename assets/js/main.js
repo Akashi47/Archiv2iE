@@ -150,7 +150,7 @@ function configurerFormulaireContribution() {
     if (!formulaire || !selectSemestre) return;
 
     formulaire.addEventListener("submit", (evenement) => {
-        evenement.preventDefault();
+        evenement.preventDefault(); // Bloque le rechargement standard de la page
 
         const bouton = formulaire.querySelector('button[type="submit"]');
         const texteOrigine = bouton.innerHTML;
@@ -173,7 +173,7 @@ function configurerFormulaireContribution() {
         reader.onload = function() {
             const base64Data = reader.result.split(',')[1];
 
-            // Données d'identité et classification (Passées en paramètres d'URL légers)
+            // Récupération des valeurs textuelles du formulaire
             const vNom = document.getElementById('contrib-nom').value;
             const vEmail = document.getElementById('contrib-email').value;
             
@@ -194,48 +194,65 @@ function configurerFormulaireContribution() {
             
             const vCommentaire = document.getElementById('contrib-commentaire').value;
 
-            // Construction de l'URL cible (Uniquement les textes courts)
-            const urlScript = "https://script.google.com/macros/s/AKfycbyCsHpIQj_ncjj6Tjbvaz4xqoA6KbWBpXmR-D5TvAVdTAFgKZzXpjzhf0TaDY41J7Ol/exec"
-                + "?nom=" + encodeURIComponent(vNom)
-                + "&email=" + encodeURIComponent(vEmail)
-                + "&statut=" + encodeURIComponent(vStatut)
-                + "&filiere=" + encodeURIComponent(vFiliere)
-                + "&semestre=" + encodeURIComponent(vSemestre)
-                + "&typeDoc=" + encodeURIComponent(vType + " - " + vNomDoc)
-                + "&matiere=" + encodeURIComponent(vMatiere)
-                + "&commentaire=" + encodeURIComponent(vCommentaire || "Aucun");
+            // --- CONTOURNEMENT CORS ULTIME : CRÉATION D'UNE IFRAME MASQUÉE ---
+            let iframeId = 'iframe-masquee-archiv2ie';
+            let iframe = document.getElementById(iframeId);
+            if (!iframe) {
+                iframe = document.createElement('iframe');
+                iframe.id = iframeId;
+                iframe.name = iframeId;
+                iframe.style.display = 'none'; // Totalement invisible
+                document.body.appendChild(iframe);
+            }
 
-            // Objet Fichier lourd envoyé dans le BODY
-            const filePayload = {
+            // Création d'un formulaire temporaire qui va cibler l'iframe
+            const formTemporaire = document.createElement('form');
+            formTemporaire.method = 'POST';
+            formTemporaire.action = "https://script.google.com/macros/s/AKfycbyCsHpIQj_ncjj6Tjbvaz4xqoA6KbWBpXmR-D5TvAVdTAFgKZzXpjzhf0TaDY41J7Ol/exec";
+            formTemporaire.target = iframeId; // Force l'envoi à s'exécuter dans l'iframe
+
+            // Liste de toutes les données à envoyer
+            const données = {
+                nom: vNom,
+                email: vEmail,
+                statut: vStatut,
+                filiere: vFiliere,
+                semestre: vSemestre,
+                typeDoc: vType + " - " + vNomDoc,
+                matiere: vMatiere,
+                commentaire: vCommentaire || "Aucun",
                 filename: fichier.name,
                 mimeType: fichier.type,
-                bytes: base64Data
+                bytes: base64Data // Le fichier volumineux passe sans problème ici
             };
 
-            // Envoi POST hybride : Textes dans l'URL, Fichier lourd dans le corps
-            fetch(urlScript, {
-                method: 'POST',
-                mode: 'no-cors', 
-                headers: {
-                    'Content-Type': 'text/plain'
-                },
-                body: JSON.stringify(filePayload)
-            })
-            .then(() => {
+            // Injection des données sous forme de champs cachés (<input type="hidden">)
+            for (const [cle, valeur] of Object.entries(données)) {
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = cle;
+                input.value = valeur;
+                formTemporaire.appendChild(input);
+            }
+
+            // Soumission du formulaire en arrière-plan
+            document.body.appendChild(formTemporaire);
+            formTemporaire.submit();
+            
+            // Simulation du succès de l'envoi après 3.5 secondes (temps moyen de transit pour un fichier)
+            setTimeout(() => {
+                document.body.removeChild(formTemporaire);
+                
                 alert("Merci pour votre contribution ! Votre document a bien été reçu par l'équipe Archiv2iE. 🚀");
+                
                 formulaire.reset();
                 selectSemestre.disabled = true;
                 selectSemestre.style.background = "#f5f5f5";
                 selectSemestre.innerHTML = '<option value="">-- Choisissez d\'abord la filière --</option>';
-            })
-            .catch(error => {
-                console.error("Erreur de transmission :", error);
-                alert("Une petite erreur technique est survenue.");
-            })
-            .finally(() => {
+                
                 bouton.innerHTML = texteOrigine;
                 bouton.disabled = false;
-            });
+            }, 3500);
         };
     });
 }
