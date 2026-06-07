@@ -171,10 +171,9 @@ function configurerFormulaireContribution() {
         reader.readAsDataURL(fichier);
         
         reader.onload = function() {
-            // Extraction des données brutes du fichier (Base64)
             const base64Data = reader.result.split(',')[1];
 
-            // Récupération des valeurs du formulaire
+            // Données d'identité et classification (Passées en paramètres d'URL légers)
             const vNom = document.getElementById('contrib-nom').value;
             const vEmail = document.getElementById('contrib-email').value;
             
@@ -195,7 +194,7 @@ function configurerFormulaireContribution() {
             
             const vCommentaire = document.getElementById('contrib-commentaire').value;
 
-            // Construction de l'URL globale (méthode GET) contenant TOUTES les informations
+            // Construction de l'URL cible (Uniquement les textes courts)
             const urlScript = "https://script.google.com/macros/s/AKfycbyCsHpIQj_ncjj6Tjbvaz4xqoA6KbWBpXmR-D5TvAVdTAFgKZzXpjzhf0TaDY41J7Ol/exec"
                 + "?nom=" + encodeURIComponent(vNom)
                 + "&email=" + encodeURIComponent(vEmail)
@@ -204,13 +203,24 @@ function configurerFormulaireContribution() {
                 + "&semestre=" + encodeURIComponent(vSemestre)
                 + "&typeDoc=" + encodeURIComponent(vType + " - " + vNomDoc)
                 + "&matiere=" + encodeURIComponent(vMatiere)
-                + "&commentaire=" + encodeURIComponent(vCommentaire || "Aucun")
-                + "&filename=" + encodeURIComponent(fichier.name)
-                + "&mimeType=" + encodeURIComponent(fichier.type)
-                + "&bytes=" + encodeURIComponent(base64Data);
+                + "&commentaire=" + encodeURIComponent(vCommentaire || "Aucun");
 
-            // Envoi via une requête GET ultra-simple (aucun blocage CORS possible ici)
-            fetch(urlScript, { method: 'GET', mode: 'no-cors' })
+            // Objet Fichier lourd envoyé dans le BODY
+            const filePayload = {
+                filename: fichier.name,
+                mimeType: fichier.type,
+                bytes: base64Data
+            };
+
+            // Envoi POST hybride : Textes dans l'URL, Fichier lourd dans le corps
+            fetch(urlScript, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify(filePayload)
+            })
             .then(() => {
                 alert("Merci pour votre contribution ! Votre document a bien été reçu par l'équipe Archiv2iE. 🚀");
                 formulaire.reset();
@@ -219,7 +229,7 @@ function configurerFormulaireContribution() {
                 selectSemestre.innerHTML = '<option value="">-- Choisissez d\'abord la filière --</option>';
             })
             .catch(error => {
-                console.error("Erreur :", error);
+                console.error("Erreur de transmission :", error);
                 alert("Une petite erreur technique est survenue.");
             })
             .finally(() => {
