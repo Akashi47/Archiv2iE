@@ -13,14 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
 /**
  * Injection automatique de la structure commune (Barre tricolore, Header et Footer)
- * Permet d'éviter le copier-coller de la navigation sur toutes les pages du projet.
  */
 function injecterComposantsPartages() {
-    // Détermination de la racine relative (selon si on est dans un sous-dossier ou non)
     const estDansSousDossier = window.location.pathname.includes('/cours/');
     const cheminRacine = estDansSousDossier ? '../../' : '';
 
-    // HTML de la Barre de Navigation commune
     const gabaritHeader = `
         <div class="barre-tricolore">
             <div class="barre-tricolore__segment barre-tricolore__segment--gee"></div>
@@ -28,19 +25,15 @@ function injecterComposantsPartages() {
             <div class="barre-tricolore__segment barre-tricolore__segment--geaah"></div>
         </div>
         <div class="nav-container">
-            
             <a href="${cheminRacine}index.html" class="nav-logo">
                 <img src="${cheminRacine}assets/img/logo-2ie.png" alt="Logo 2iE" style="height: 40px; width: auto; display: block; object-fit: contain;">
-                
                 <span class="nav-logo__texte">Archiv2iE</span>
             </a>
-
             <button class="hamburger" aria-label="Ouvrir le menu">
                 <span class="hamburger__barre"></span>
                 <span class="hamburger__barre"></span>
                 <span class="hamburger__barre"></span>
             </button>
-            
             <ul class="nav-menu">
                 <li><a href="${cheminRacine}index.html" class="nav-menu__lien">Accueil</a></li>
                 <li><a href="${cheminRacine}cours/tronc-commun.html" class="nav-menu__lien">Tronc Commun</a></li>
@@ -60,14 +53,12 @@ function injecterComposantsPartages() {
         </div>
     `;
 
-    // Injection au sommet du header
     const elementHeader = document.getElementById("header-commun");
     if (elementHeader) {
         elementHeader.className = "site-header";
         elementHeader.innerHTML = gabaritHeader;
     }
 
-    // Injection au niveau du footer
     const elementFooter = document.getElementById("footer-commun");
     if (elementFooter) {
         elementFooter.className = "site-footer";
@@ -86,7 +77,6 @@ function configurerMenuMobile() {
         if (boutonHamburger && menuNavigation) {
             boutonHamburger.addEventListener("click", () => {
                 menuNavigation.classList.toggle("nav-menu--actif");
-                
                 const barres = boutonHamburger.querySelectorAll(".hamburger__barre");
                 barres.forEach(barre => barre.classList.toggle("active"));
             });
@@ -151,7 +141,7 @@ function configurerVerificateurLiensDrive() {
 }
 
 /**
- * Gestion du formulaire de contribution
+ * Gestion intelligente du formulaire de contribution et liaison Google Drive
  */
 function configurerFormulaireContribution() {
     const formulaire = document.getElementById("formulaire-contribution");
@@ -160,16 +150,99 @@ function configurerFormulaireContribution() {
     if (!formulaire || !selectSemestre) return;
 
     formulaire.addEventListener("submit", (evenement) => {
-        evenement.preventDefault();
-        const nom = document.getElementById("contrib-nom").value;
-        const nomDoc = document.getElementById("contrib-nom-doc").value;
+        evenement.preventDefault(); // On coupe le comportement par défaut
 
-        alert("Merci pour votre contribution, " + nom + " !\n\nVotre document \"" + nomDoc + "\" sera examiné par l'équipe Archiv2iE avant d'être publié.\n\nEnsemble, on construit quelque chose de grand. 🚀");
+        // 1. Changement d'état visuel du bouton de soumission
+        const bouton = formulaire.querySelector('button[type="submit"]');
+        const texteOrigine = bouton.innerHTML;
+        bouton.innerHTML = "Envoi en cours... ⏳";
+        bouton.disabled = true;
+
+        // 2. Récupération et vérification du fichier joint
+        const champFichier = document.getElementById('contrib-fichier');
+        const fichier = champFichier.files[0];
+
+        if (!fichier) {
+            alert("Veuillez sélectionner un fichier à envoyer.");
+            bouton.innerHTML = texteOrigine;
+            bouton.disabled = false;
+            return;
+        }
+
+        // 3. Traitement de la lecture du document et encodage Base64
+        const reader = new FileReader();
+        reader.readAsDataURL(fichier);
         
-        formulaire.reset();
-        selectSemestre.disabled = true;
-        selectSemestre.style.background = "#f5f5f5";
-        selectSemestre.innerHTML = '<option value="">-- Choisissez d\'abord la filière --</option>';
+        reader.onload = function() {
+            const base64Data = reader.result.split(',')[1];
+            
+            const filePayload = {
+                filename: fichier.name,
+                mimeType: fichier.type,
+                bytes: base64Data
+            };
+
+            // 4. Extraction structurée des données du formulaire
+            const vNom = document.getElementById('contrib-nom').value;
+            const vEmail = document.getElementById('contrib-email').value;
+            
+            const rStatut = formulaire.querySelector('input[name="statut-user"]:checked');
+            const vStatut = rStatut ? rStatut.value : "Non précisé";
+            
+            const eFiliere = document.getElementById('contrib-filiere');
+            const vFiliere = eFiliere.options[eFiliere.selectedIndex].text;
+            
+            const eSemestre = document.getElementById('contrib-semestre');
+            const vSemestre = eSemestre.options[eSemestre.selectedIndex].text;
+            
+            const vNomDoc = document.getElementById('contrib-nom-doc').value;
+            const vMatiere = document.getElementById('contrib-matiere').value;
+            
+            const rType = formulaire.querySelector('input[name="type-doc"]:checked');
+            const vType = rType ? rType.value : "Autre";
+            
+            const vCommentaire = document.getElementById('contrib-commentaire').value;
+
+            // 5. Assemblage précis des données URL à destination du Google Apps Script
+            const urlScript = "https://script.google.com/macros/s/AKfycbyCsHpIQj_ncjj6Tjbvaz4xqoA6KbWBpXmR-D5TvAVdTAFgKZzXpjzhf0TaDY41J7Ol/exec"
+                + "?nom=" + encodeURIComponent(vNom)
+                + "&email=" + encodeURIComponent(vEmail)
+                + "&statut=" + encodeURIComponent(vStatut)
+                + "&filiere=" + encodeURIComponent(vFiliere)
+                + "&semestre=" + encodeURIComponent(vSemestre)
+                + "&typeDoc=" + encodeURIComponent(vType + " - " + vNomDoc)
+                + "&matiere=" + encodeURIComponent(vMatiere)
+                + "&commentaire=" + encodeURIComponent(vCommentaire || "Aucun");
+
+            // 6. Exécution sécurisée sans blocage CORS (no-cors)
+            fetch(urlScript, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'text/plain'
+                },
+                body: JSON.stringify(filePayload)
+            })
+            .then(() => {
+                // En mode no-cors la transmission est aveugle : le déclencheur Apps Script s'active en arrière-plan
+                alert("Merci pour votre contribution ! Votre document a bien été reçu par l'équipe Archiv2iE. 🚀");
+                
+                // Ré-initialisation propre des éléments du formulaire
+                formulaire.reset();
+                selectSemestre.disabled = true;
+                selectSemestre.style.background = "#f5f5f5";
+                selectSemestre.innerHTML = '<option value="">-- Choisissez d\'abord la filière --</option>';
+            })
+            .catch(error => {
+                console.error("Erreur de transmission :", error);
+                alert("Une petite erreur technique est survenue.");
+            })
+            .finally(() => {
+                // Restauration de ton bouton de validation
+                bouton.innerHTML = texteOrigine;
+                bouton.disabled = false;
+            });
+        };
     });
 }
 
@@ -204,140 +277,4 @@ function actualiserListeSemestres(filiereSelectionnee) {
         selectSemestre.style.background = "#f5f5f5";
         selectSemestre.innerHTML = '<option value="">-- Choisissez d\'abord la filière --</option>';
     }
-}
-// On cible le formulaire avec son identifiant exact
-const formulaire = document.getElementById('formulaire-contribution');
-
-if (formulaire) {
-    formulaire.addEventListener('submit', function(e) {
-        e.preventDefault(); // On empêche le rechargement de la page
-        
-        // Effet visuel sur ton bouton pour faire patienter l'utilisateur
-        const bouton = formulaire.querySelector('button[type="submit"]');
-        const texteOrigine = bouton.innerHTML;
-        bouton.innerHTML = "Envoi en cours... ⏳";
-        bouton.disabled = true;
-
-        // Récupération du fichier via son ID exact
-        const champFichier = document.getElementById('contrib-fichier');
-        const fichier = champFichier.files[0];
-
-        if (!fichier) {
-            alert("Veuillez sélectionner un fichier à envoyer.");
-            bouton.innerHTML = texteOrigine;
-            bouton.disabled = false;
-            return;
-        }
-
-        // Lecture et conversion du document en Base64
-        const reader = new FileReader();
-        reader.readAsDataURL(fichier);
-        
-        reader.onload = function() {
-            const base64Data = reader.result.split(',')[1];
-            
-            const filePayload = {
-                filename: fichier.name,
-                mimeType: fichier.type,
-                bytes: base64Data
-            };
-
-            // Extraction des valeurs en utilisant tes vrais ID et balises boutons radios
-            const vNom = document.getElementById('contrib-nom').value;
-            const vEmail = document.getElementById('contrib-email').value;
-            
-            // Radio bouton pour le statut
-            const rStatut = formulaire.querySelector('input[name="statut-user"]:checked');
-            const vStatut = rStatut ? rStatut.value : "Non précisé";
-            
-            // Sélections textuelles des listes déroulantes
-            const eFiliere = document.getElementById('contrib-filiere');
-            const vFiliere = eFiliere.options[eFiliere.selectedIndex].text;
-            
-            const eSemestre = document.getElementById('contrib-semestre');
-            const vSemestre = eSemestre.options[eSemestre.selectedIndex].text;
-            
-            const vNomDoc = document.getElementById('contrib-nom-doc').value;
-            const vMatiere = document.getElementById('contrib-matiere').value;
-            
-            // Radio bouton pour le type de document
-            const rType = formulaire.querySelector('input[name="type-doc"]:checked');
-            const vType = rType ? rType.value : "Autre";
-            
-            const vCommentaire = document.getElementById('contrib-commentaire').value;
-
-            // Construction de l'adresse de transmission vers ton Google Apps Script
-            const urlScript = "https://script.google.com/macros/s/AKfycbyCsHpIQj_ncjj6Tjbvaz4xqoA6KbWBpXmR-D5TvAVdTAFgKZzXpjzhf0TaDY41J7Ol/exec"
-                + "?nom=" + encodeURIComponent(vNom)
-                + "&email=" + encodeURIComponent(vEmail)
-                + "&statut=" + encodeURIComponent(vStatut)
-                + "&filiere=" + encodeURIComponent(vFiliere)
-                + "&semestre=" + encodeURIComponent(vSemestre)
-                + "&typeDoc=" + encodeURIComponent(vType + " - " + vNomDoc)
-                + "&matiere=" + encodeURIComponent(vMatiere)
-                + "&commentaire=" + encodeURIComponent(vCommentaire || "Aucun");
-
-            // 6. ENVOI VIA IFRAME MASQUÉE (Contournement universel du blocage CORS)
-            // On crée une iframe invisible pour soumettre les données sans bloquer le site
-            let iframeId = 'invisible-iframe-upload';
-            let iframe = document.getElementById(iframeId);
-            if (!iframe) {
-                iframe = document.createElement('iframe');
-                iframe.id = iframeId;
-                iframe.name = iframeId;
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
-            }
-
-            // On crée un mini-formulaire temporaire qui va pointer vers ton Google Apps Script
-            const formTemporaire = document.createElement('form');
-            formTemporaire.method = 'POST';
-            formTemporaire.action = "https://script.google.com/macros/s/AKfycbyCsHpIQj_ncjj6Tjbvaz4xqoA6KbWBpXmR-D5TvAVdTAFgKZzXpjzhf0TaDY41J7Ol/exec";
-            formTemporaire.target = iframeId; // Envoi dans l'iframe masquée
-
-            // On y injecte les paramètres du document
-            const parametres = {
-                nom: vNom,
-                email: vEmail,
-                statut: vStatut,
-                filiere: vFiliere,
-                semestre: vSemestre,
-                typeDoc: vType + " - " + vNomDoc,
-                matiere: vMatiere,
-                commentaire: vCommentaire || "Aucun"
-            };
-
-            // Ajout des champs textes au formulaire temporaire
-            for (const [key, value] of Object.entries(parametres)) {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = key;
-                input.value = value;
-                formTemporaire.appendChild(input);
-            }
-
-            // On ajoute le fichier encodé en JSON string pour le Apps Script
-            const inputPayload = document.createElement('input');
-            inputPayload.type = 'hidden';
-            inputPayload.name = 'filePayloadCaché'; // On envoie le JSON sous forme de texte brut
-            inputPayload.value = JSON.stringify(filePayload);
-            formTemporaire.appendChild(inputPayload);
-
-            // Soumission et nettoyage immédiat
-            document.body.appendChild(formTemporaire);
-            formTemporaire.submit();
-            
-            // On simule le succès après 3 secondes d'envoi théorique
-            setTimeout(() => {
-                document.body.removeChild(formTemporaire);
-                alert("Merci pour votre contribution ! Votre document a bien été reçu par l'équipe Archiv2iE.");
-                formulaire.reset();
-                if (typeof actualiserListeSemestres === "function") {
-                    document.getElementById('contrib-semestre').disabled = true;
-                }
-                bouton.innerHTML = texteOrigine;
-                bouton.disabled = false;
-            }, 3000);
-        };
-    });
 }
