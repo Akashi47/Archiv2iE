@@ -89,6 +89,14 @@ function configurerMenuMobile() {
  */
 function configurerVerificateurLiensDrive() {
     const liensDrive = {
+        "maths": "https://drive.google.com/drive/folders/1bzCJFDkE8TgHboS7j_Fb9V8hQPs7sbG6?usp=drive_link",
+        "hydraulique": "https://drive.google.com/drive/folders/1o3H20jmfyknqpRiBHdIr4Kfzb4Q2ZLLK?usp=drive_link",
+        "structures": "https://drive.google.com/drive/folders/1VipaXOLVzsboPvqDIURTfxBc_T8Go-Gu?usp=drive_link",
+        "electricite": "https://drive.google.com/drive/folders/1vxJjBZ3RWn4rXxP3HRrCKJD5T9CQWfK5?usp=drive_link",
+        "environnement": "https://drive.google.com/drive/folders/16kGTSON3VM00fgO7yHSw-Crd_Invwl2E?usp=drive_link",
+        "topo": "https://drive.google.com/drive/folders/1qHREb9syoYHnP8SDe3fNB0doqYVlfyIg?usp=drive_link",
+        "gestion": "https://drive.google.com/drive/folders/1ogXJra52xgtYmpJzdGvK-Jqb7i648-hz?usp=drive_link",
+        "outils": "https://drive.google.com/drive/folders/1Fit1ZhawLmkbBpwykFl4XdTA5Byiat01?usp=drive_link"
         "rapports-stage": "https://drive.google.com/drive/folders/1BlvVMKXNe9vtMIrDwi-rCikYBIWQ8Vfb?usp=drive_link",
         "rapports-pfe": "https://drive.google.com/drive/folders/1I2ZrQ3mFpQ4hwxV_5lbyESOrPsL4jAPS?usp=drive_link",
         "rapports-projets": "https://drive.google.com/drive/folders/1OxNcNcWlR4O18F2Eu-nrUeWZuwe0w46q?usp=drive_link",
