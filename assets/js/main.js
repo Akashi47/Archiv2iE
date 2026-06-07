@@ -150,15 +150,13 @@ function configurerFormulaireContribution() {
     if (!formulaire || !selectSemestre) return;
 
     formulaire.addEventListener("submit", (evenement) => {
-        evenement.preventDefault(); // On coupe le comportement par défaut
+        evenement.preventDefault();
 
-        // 1. Changement d'état visuel du bouton de soumission
         const bouton = formulaire.querySelector('button[type="submit"]');
         const texteOrigine = bouton.innerHTML;
         bouton.innerHTML = "Envoi en cours... ⏳";
         bouton.disabled = true;
 
-        // 2. Récupération et vérification du fichier joint
         const champFichier = document.getElementById('contrib-fichier');
         const fichier = champFichier.files[0];
 
@@ -169,20 +167,14 @@ function configurerFormulaireContribution() {
             return;
         }
 
-        // 3. Traitement de la lecture du document et encodage Base64
         const reader = new FileReader();
         reader.readAsDataURL(fichier);
         
         reader.onload = function() {
+            // Extraction des données brutes du fichier (Base64)
             const base64Data = reader.result.split(',')[1];
-            
-            const filePayload = {
-                filename: fichier.name,
-                mimeType: fichier.type,
-                bytes: base64Data
-            };
 
-            // 4. Extraction structurée des données du formulaire
+            // Récupération des valeurs du formulaire
             const vNom = document.getElementById('contrib-nom').value;
             const vEmail = document.getElementById('contrib-email').value;
             
@@ -203,7 +195,7 @@ function configurerFormulaireContribution() {
             
             const vCommentaire = document.getElementById('contrib-commentaire').value;
 
-            // 5. Assemblage précis des données URL à destination du Google Apps Script
+            // Construction de l'URL globale (méthode GET) contenant TOUTES les informations
             const urlScript = "https://script.google.com/macros/s/AKfycbyCsHpIQj_ncjj6Tjbvaz4xqoA6KbWBpXmR-D5TvAVdTAFgKZzXpjzhf0TaDY41J7Ol/exec"
                 + "?nom=" + encodeURIComponent(vNom)
                 + "&email=" + encodeURIComponent(vEmail)
@@ -212,33 +204,25 @@ function configurerFormulaireContribution() {
                 + "&semestre=" + encodeURIComponent(vSemestre)
                 + "&typeDoc=" + encodeURIComponent(vType + " - " + vNomDoc)
                 + "&matiere=" + encodeURIComponent(vMatiere)
-                + "&commentaire=" + encodeURIComponent(vCommentaire || "Aucun");
+                + "&commentaire=" + encodeURIComponent(vCommentaire || "Aucun")
+                + "&filename=" + encodeURIComponent(fichier.name)
+                + "&mimeType=" + encodeURIComponent(fichier.type)
+                + "&bytes=" + encodeURIComponent(base64Data);
 
-            // 6. Exécution sécurisée sans blocage CORS (no-cors)
-            fetch(urlScript, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {
-                    'Content-Type': 'text/plain'
-                },
-                body: JSON.stringify(filePayload)
-            })
+            // Envoi via une requête GET ultra-simple (aucun blocage CORS possible ici)
+            fetch(urlScript, { method: 'GET', mode: 'no-cors' })
             .then(() => {
-                // En mode no-cors la transmission est aveugle : le déclencheur Apps Script s'active en arrière-plan
                 alert("Merci pour votre contribution ! Votre document a bien été reçu par l'équipe Archiv2iE. 🚀");
-                
-                // Ré-initialisation propre des éléments du formulaire
                 formulaire.reset();
                 selectSemestre.disabled = true;
                 selectSemestre.style.background = "#f5f5f5";
                 selectSemestre.innerHTML = '<option value="">-- Choisissez d\'abord la filière --</option>';
             })
             .catch(error => {
-                console.error("Erreur de transmission :", error);
+                console.error("Erreur :", error);
                 alert("Une petite erreur technique est survenue.");
             })
             .finally(() => {
-                // Restauration de ton bouton de validation
                 bouton.innerHTML = texteOrigine;
                 bouton.disabled = false;
             });
